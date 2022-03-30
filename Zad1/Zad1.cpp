@@ -27,7 +27,8 @@ int main()
 	}
 
 	Triangle t(Vector3(0.8, 0, -2), Vector3(0.5, -0.9, 1), Vector3(-0.9, 0.2, -2), Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), width, height);
-	Triangle d(Vector3(0.9, 0.8, 1), Vector3(0.2, -0.6, -2), Vector3(-0.6, 0.8, 1), Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), width, height);
+	//Triangle d(Vector3(0.9, 0.8, 1), Vector3(0.2, -0.6, -2), Vector3(-0.6, 0.8, 1), Vector3(255, 255, 0), Vector3(40, 180, 100), Vector3(90, 140, 180), width, height);
+	Triangle d(Vector3(0.8, 0.0, 1), Vector3(-0.9, 0.2, 1), Vector3(-0.6, 0.8, 1), Vector3(255, 255, 0), Vector3(40, 180, 100), Vector3(90, 140, 180), width, height);
 
 	for (int i = 0; i < height; i++)
 	{
