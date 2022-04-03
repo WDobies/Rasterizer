@@ -1,12 +1,32 @@
 #include "Triangle.h"
 #include <iostream>
+#include "Matrix4.h"
 
 
 Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height) : 
 	v1(v1), v2(v2), v3(v3), colorV1(c1), colorV2(c2), colorV3(c3), width(width), height(height)
 {
+	Matrix4 obj2view;
+	obj2view.Perspective(45.f,1.f,-1.f,10.f);
+	std::cout<<obj2view.ToString();
+
+	Vector4 p1 = obj2view * Vector4(v1, 1);
+	Vector4 p2 = obj2view * Vector4(v2, 1);
+	Vector4 p3 = obj2view * Vector4(v3, 1);
+
+	this->v1 = Vector3(p1.x / p1.w, p1.y / p1.w, p1.z / p1.w);
+	this->v2 = Vector3(p2.x / p2.w, p2.y / p2.w, p2.z / p2.w);
+	this->v3 = Vector3(p3.x / p3.w, p3.y / p3.w, p3.z / p3.w);
+
+	std::cout << this->v1.ToString();
+	std::cout << this->v2.ToString();
+	std::cout << this->v3.ToString();
+
 	can();
 	cut();
+	std::cout << this->v1.ToString();
+	std::cout << this->v2.ToString();
+	std::cout << this->v3.ToString();
 	dx12 = this->v1.x - this->v2.x;
 	dx23 = this->v2.x - this->v3.x;
 	dx31 = this->v3.x - this->v1.x;
