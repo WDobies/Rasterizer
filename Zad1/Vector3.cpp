@@ -1,4 +1,4 @@
-#include "Vector3.hpp"
+#include "Vector3.h"
 #include <Math.h>
 
 Vector3::Vector3() : x(0), y(0), z(0)
@@ -111,7 +111,7 @@ float Vector3::SqrMagnitude()const
 Vector3 Vector3::Normalize(const Vector3 &a)
 {
 	float magnitude = a.Magnitude();
-	if (magnitude < 0.00001f)
+	if (magnitude > 0.00001f)
 		return a / magnitude;
 	return Vector3(0.0f, 0.0f, 0.0f);
 }
@@ -119,7 +119,7 @@ Vector3 Vector3::Normalize(const Vector3 &a)
 Vector3 Vector3::Normalize()
 {
 	float magnitude = this->Magnitude();
-	if (magnitude < 0.00001f)
+	if (magnitude > 0.00001f)
 		return *this / magnitude;
 	return Vector3(0.0f, 0.0f, 0.0f);
 }

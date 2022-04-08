@@ -1,5 +1,6 @@
 #pragma once
-#include "Vector3.hpp"
+#include "Vector3.h"
+#include "ColorBuffer.h"
 class Triangle
 {
 public:
@@ -28,9 +29,10 @@ public:
     float L2;
     float L3;
 
-    void can();
-    void cut();
-    bool condition(int &i, int &j);
+    void PixelCoords();
+    void MinSpace();
+    bool isInsideTriangle(int &i, int &j);
+    void Draw(int& i, int& j, ColorBuffer& buffer);
     void Lambda(int& i, int& j);
 
 private:

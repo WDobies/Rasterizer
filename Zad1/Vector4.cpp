@@ -26,3 +26,44 @@ std::string Vector4::ToString() const
 	text += std::to_string(w) + "\n";
 	return text;
 }
+
+Vector4 Vector4::operator*(const Vector4& b) const
+{
+	return Vector4(x * b.x, y * b.y, z * b.z, w * b.w);
+}
+
+Vector4 Vector4::operator*(const Vector3& b) const
+{
+	return Vector4(x * b.x, y * b.y, z * b.z, w);
+}
+
+Vector4 Vector4::operator*(float k)const
+{
+	return Vector4(x * k, y * k, z * k, w * k);
+}
+
+Vector4& Vector4::operator*=(float k)
+{
+	this->x *= k;
+	this->y *= k;
+	this->z *= k;
+	this->w *= k;
+	return *this;
+}
+
+Vector4& Vector4::operator+=(const Vector4 v)
+{
+	this->x += v.x;
+	this->y += v.y;
+	this->z += v.z;
+	this->w += v.w;
+	return *this;
+}
+
+Vector4& Vector4::operator+=(const Vector3 v)
+{
+	this->x += v.x;
+	this->y += v.y;
+	this->z += v.z;
+	return *this;
+}
