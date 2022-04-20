@@ -12,13 +12,13 @@ public:
 
 	Matrix4& Perspective(float fov, float aspect, float near, float far);
 
-	Matrix4& LookAt(Vector3 eye, Vector3 center, Vector3 up = Vector3(0,1,0));
+	Matrix4 LookAt(Vector3 eye, Vector3 center, Vector3 up = Vector3(0,1,0));
 
 	static Matrix4 Translate(Matrix4 m1, Vector3 v);
 	static Matrix4 Scale(Matrix4 m1, Vector3 v);
 	static Matrix4 Rotate(Matrix4 m1, Vector3 axis, float angle);
 
-	static Matrix4 Mul(Matrix4 m1, Matrix4 m2);
+	Matrix4 operator *(const Matrix4& m2)const;
 	static Matrix4 Identity();
 
 	std::string ToString()const;

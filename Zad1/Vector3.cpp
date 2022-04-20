@@ -127,8 +127,8 @@ Vector3 Vector3::Normalize()
 
 std::string Vector3::ToString()const
 {
-	std::string text = "  x = " + std::to_string(x) + "\n";
-	text += "  y = " + std::to_string(y) + "\n";
-	text += "  z = " + std::to_string(z) + "\n";
+	std::string text = std::to_string(x) + " "
+	+ std::to_string(y) + " "
+	+ std::to_string(z) + "\n";
 	return text;
 }

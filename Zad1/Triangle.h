@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector3.h"
 #include "ColorBuffer.h"
+#include "Matrix4.h"
 class Triangle
 {
 public:
@@ -34,6 +35,10 @@ public:
     bool isInsideTriangle(int &i, int &j);
     void Draw(int& i, int& j, ColorBuffer& buffer);
     void Lambda(int& i, int& j);
+    void SetView(Matrix4 obj2view, Matrix4 camera);
+    void SetTranslation(Vector3 t);
+    void SetRotation(Vector3 axis, float angle);
+    void SetScale(Vector3 s);
 
 private:
     float dx12;
@@ -49,5 +54,7 @@ private:
     bool tl1;
     bool tl2;
     bool tl3;
+
+    Matrix4 model;
 };
 
