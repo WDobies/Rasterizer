@@ -35,9 +35,9 @@ void Triangle::SetView(Matrix4 obj2view, Matrix4 camera) {
 	dy13 = this->v1.y - this->v3.y;
 
 	//find top and left edges
-	if (dx12 < 0 || (dx12 == 0 && dx12 > 0)) { tl1 = true; }
-	if (dx23 < 0 || (dx23 == 0 && dx23 > 0)) { tl2 = true; }
-	if (dx31 < 0 || (dx31 == 0 && dx31 > 0)) { tl3 = true; }
+	if (dy12 < 0 || (dy12 == 0 && dx12 > 0)) { tl1 = true; }
+	if (dy23 < 0 || (dy23 == 0 && dx23 > 0)) { tl2 = true; }
+	if (dy31 < 0 || (dy31 == 0 && dx31 > 0)) { tl3 = true; }
 }
 
 void Triangle::Draw(int& i, int& j, ColorBuffer& buffer)
@@ -104,7 +104,7 @@ void Triangle::SetScale(Vector3 s)
 
 bool Triangle::isInsideTriangle(int &i, int &j)
 {
-	if(i > miny && i<maxy&& j>minx && j < maxx) 
+	if(i >= miny && i<maxy&& j>=minx && j < maxx) 
 	{
 		// check if pixel is inside triangle
 		float f1 = (((dx12) * (i - v1.y) - (dy12) * (j - v1.x)));

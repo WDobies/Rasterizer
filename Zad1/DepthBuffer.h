@@ -1,6 +1,6 @@
 #pragma once
-#define WIDTH 600
-#define HEIGHT 600
+#define WIDTH 1000
+#define HEIGHT 1000
 #define DEPTHBUFFER DepthBuffer::Instance(WIDTH, HEIGHT).depthbuff
 class DepthBuffer
 {
