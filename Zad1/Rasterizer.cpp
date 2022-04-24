@@ -1,17 +1,17 @@
-#include "Triangle.h"
+#include "Rasterizer.h"
 #include <iostream>
 #include "Matrix4.h"
 #include "ColorBuffer.h"
 #include "DepthBuffer.h"
 
 
-Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height) : 
-	v1(v1), v2(v2), v3(v3), colorV1(c1), colorV2(c2), colorV3(c3), width(width), height(height)
+Rasterizer::Rasterizer(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3) : 
+	v1(v1), v2(v2), v3(v3), colorV1(c1), colorV2(c2), colorV3(c3)
 {
 	model = Matrix4::Identity();
 }
 
-void Triangle::SetView(Matrix4 obj2view, Matrix4 camera) {
+void Rasterizer::SetView(Matrix4 obj2view, Matrix4 camera) {
 
 	Vector4 p1 = obj2view * camera * model * Vector4(v1, 1);
 	Vector4 p2 = obj2view * camera * model * Vector4(v2, 1);
@@ -40,33 +40,30 @@ void Triangle::SetView(Matrix4 obj2view, Matrix4 camera) {
 	if (dy31 < 0 || (dy31 == 0 && dx31 > 0)) { tl3 = true; }
 }
 
-void Triangle::Draw(int& i, int& j, ColorBuffer& buffer)
+void Rasterizer::Draw(int& i, int& j, ColorBuffer& buffer)
 {
 	if (isInsideTriangle(i, j))
 	{
 		float depth = L1 * v1.z + L2 * v2.z + L3 * v3.z;
 		if (depth < DEPTHBUFFER[i * HEIGHT + j])
 		{
-			//R[i * HEIGHT + j]= t.R;
-			//G[i * HEIGHT + j] = t.G;
-			//B[i * HEIGHT + j] = t.B;
 			buffer.SetColor(j, i, R, G, B);
 			DEPTHBUFFER[i * HEIGHT + j] = depth;
 		}
 	}
 }
 
-void Triangle::PixelCoords()
+void Rasterizer::PixelCoords()
 {
-	v1.x = (int)((v1.x + 1) * width * 0.5f);
-	v1.y = (int)((v1.y + 1) * height * 0.5f);
-	v2.x = (int)((v2.x + 1) * width * 0.5f);
-	v2.y = (int)((v2.y + 1) * height * 0.5f);
-	v3.x = (int)((v3.x + 1) * width * 0.5f);
-	v3.y = (int)((v3.y + 1) * height * 0.5f);
+	v1.x = (int)((v1.x + 1) * WIDTH * 0.5f);
+	v1.y = (int)((v1.y + 1) * HEIGHT * 0.5f);
+	v2.x = (int)((v2.x + 1) * WIDTH * 0.5f);
+	v2.y = (int)((v2.y + 1) * HEIGHT * 0.5f);
+	v3.x = (int)((v3.x + 1) * WIDTH * 0.5f);
+	v3.y = (int)((v3.y + 1) * HEIGHT * 0.5f);
 }
 
-void Triangle::MinSpace()
+void Rasterizer::MinSpace()
 {
 	minx = std::min(v1.x, std::min(v2.x, v3.x));
 	miny = std::min(v1.y, std::min(v2.y, v3.y));
@@ -74,7 +71,7 @@ void Triangle::MinSpace()
 	maxy = std::max(v1.y, std::max(v2.y, v3.y));
 }
 
-void Triangle::Lambda(int& i, int& j)
+void Rasterizer::Lambda(int& i, int& j)
 {
 	//baricentric cords
 	L1 = (dy23 * (j - v3.x) + dx32 * (i - v3.y)) / (dy23 * dx13 + dx32 * dy13);
@@ -87,22 +84,22 @@ void Triangle::Lambda(int& i, int& j)
 	B = L1 * colorV1.z + L2 * colorV2.z + L3 * colorV3.z;
 }
 
-void Triangle::SetTranslation(Vector3 t)
+void Rasterizer::SetTranslation(Vector3 t)
 {
 	model = Matrix4::Translate(model,t);
 }
 
-void Triangle::SetRotation(Vector3 axis, float angle)
+void Rasterizer::SetRotation(Vector3 axis, float angle)
 {
 	model = Matrix4::Rotate(model, axis, angle);
 }
 
-void Triangle::SetScale(Vector3 s)
+void Rasterizer::SetScale(Vector3 s)
 {
 	model = Matrix4::Scale(model, s);
 }
 
-bool Triangle::isInsideTriangle(int &i, int &j)
+bool Rasterizer::isInsideTriangle(int &i, int &j)
 {
 	if(i >= miny && i<maxy&& j>=minx && j < maxx) 
 	{

@@ -1,8 +1,6 @@
-#include "Sphere.h"
-#include <iostream>
-#include "Mesh.h"
+#include "Cylinder.h"
 
-Sphere::Sphere(int vert, int horiz)
+Cylinder::Cylinder(int vert, int horiz, float radius)
 {
 	tSize = 2 * vert * horiz;
 	vSize = vert * (horiz + 2);
@@ -10,13 +8,25 @@ Sphere::Sphere(int vert, int horiz)
 	vertices = new Vector3[vSize];
 	indices = new Vector3[tSize];
 
-	float x,y,z,r;
+	float x, y, z, r;
 
-	for (int yy = 0; yy <= horiz+1; ++yy)
+	for (int yy = 0; yy <= horiz + 1; ++yy)
 	{
 		y = cos(yy * PI / (horiz + 1));
-		float temp = 1 - y * y;
-		r = sqrt(temp);
+
+		float temp = 1 - y*y;
+		
+		if (yy == 0) 
+		{ 
+			r = 0;
+			y = cos((yy + 1) * PI / (horiz + 1));
+		}
+		else if (yy == horiz + 1)
+		{	r = 0;
+			y = cos((yy - 1) * PI / (horiz + 1));
+		}
+		else r = radius;
+	
 
 		for (int rr = 0; rr < vert; ++rr)
 		{
@@ -35,9 +45,9 @@ Sphere::Sphere(int vert, int horiz)
 				rr + vert + yy * vert,
 				(rr + 1) % vert + vert + yy * vert
 			);
-			indices[(int)(rr + vert +2 * yy * vert)] = Vector3(
+			indices[(int)(rr + vert + 2 * yy * vert)] = Vector3(
 				rr + vert + yy * vert,
-				rr+2*vert + yy*vert,				
+				rr + 2 * vert + yy * vert,
 				(rr + 1) % vert + vert + yy * vert
 			);
 		}

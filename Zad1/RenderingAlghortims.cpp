@@ -1,42 +1,23 @@
 #include <iostream>
 #include <fstream>
-#include "Triangle.h"
+#include "Rasterizer.h"
 #include "DepthBuffer.h"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 #include "ColorBuffer.h"
 #include "Sphere.h"
 #include <vector>
+#include "Cylinder.h"
+
+#include "Cone.h"
 
 int main()
 {
 	ColorBuffer buffer(WIDTH, HEIGHT);
 
-	for (int i = 0; i < HEIGHT; i++)
-	{
-		for (int j = 0; j < WIDTH; j++)
-		{
-			DEPTHBUFFER[i* HEIGHT +j] = INFINITY;
-		}
-	}
-
-	Triangle tr(Vector3(0.5, 1.0, 0), Vector3(0.5, 0.0, 0), Vector3(-0.5, 1.0, 0), Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), WIDTH, HEIGHT);
-	Triangle d(Vector3(-0.5, 0.0, 0), Vector3(-0.5, 1.0, 0), Vector3(0.5, 0.0, 0), Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), WIDTH, HEIGHT);
-	Triangle down(Vector3(0.5, 0.0, 0), Vector3(0.5, -1.0, 0), Vector3(-0.5, 0.0, 0), Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), WIDTH, HEIGHT);
-
-	Sphere sphere(15, 2);
-	Sphere sph(15, 15);
-	std::vector<Triangle> triangles;
-	std::vector<Triangle> trSph;
-
-	for (int i = 0; i < sphere.tSize; i++)
-	{
-		triangles.push_back(Triangle(sphere.vertices[(int)sphere.indices[i].y], sphere.vertices[(int)sphere.indices[i].x], sphere.vertices[(int)sphere.indices[i].z], Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), WIDTH, HEIGHT));
-	}
-	for (int i = 0; i < sph.tSize; i++)
-	{
-		trSph.push_back(Triangle(sph.vertices[(int)sph.indices[i].x], sph.vertices[(int)sph.indices[i].y], sph.vertices[(int)sph.indices[i].z], Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), WIDTH, HEIGHT));
-	}
+	Mesh *cylinder = new Cylinder(20,2,0.9);
+	Mesh *sphere = new Sphere(15, 15);
+	Mesh* cone = new Cone(15);
 
 	Matrix4 obj2view;
 	obj2view.Perspective(50, 1.f, 0.1f, 100.f);
@@ -44,47 +25,37 @@ int main()
 	Matrix4 camera;
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
-	std::cout << triangles.size();
+	//cylinder->SetColor(Vector3(255, 0, 0));
+	cylinder->SetTranslation(Vector3(2, 1, 8));
+	cylinder->SetRotation(Vector3(1, 0, 0), 30);
+	cylinder->SetView(obj2view, camera);
 
-	for (auto& t : triangles)
-	{
-		t.SetTranslation(Vector3(0, 0.0f, 3));
-		t.SetRotation(Vector3(1, 0, 0), 20);
-		t.SetView(obj2view, camera);
-	}
-	for (auto& t : trSph)
-	{
-		t.SetTranslation(Vector3(0.8f, 0.0f, 7));
-		//t.SetRotation(Vector3(1, 1, 1), 45);
-		t.SetView(obj2view, camera);
-	}
+	sphere->SetTranslation(Vector3(0, -1, 9));
+	sphere->SetView(obj2view, camera);
 
-	tr.SetTranslation(Vector3(0, 0, 4));
-	tr.SetView(obj2view, camera);
+	cone->SetTranslation(Vector3(-3, -1, 11));
+	cone->SetRotation(Vector3(1, 0, 0), 30);
+	cone->SetView(obj2view, camera);
 
-	d.SetTranslation(Vector3(0, 0, 4));
-	d.SetView(obj2view, camera);
-
-	down.SetTranslation(Vector3(0, 0, 4));
-	down.SetView(obj2view, camera);
+	std::vector<Mesh*> objects = { cylinder,sphere,cone };
 
 	for (int i = 0; i < HEIGHT; i++)
 	{
 		for (int j = 0; j < WIDTH; j++)
 		{
-			//tr.Draw(i, j, buffer);
-			//d.Draw(i, j, buffer);
-			//down.Draw(i, j, buffer);
-			for (auto& t : triangles)
+			for (Mesh* mesh : objects)
 			{
-				t.Draw(i, j, buffer);
+				mesh->Draw(i, j, buffer);
 			}
-			//for (auto& t : trSph)
-			//{
-			//	t.Draw(i, j, buffer);
-			//}
 		}
 	}
 
 	stbi_write_png("Image.png", buffer.width, buffer.height, 3, buffer.data, 0);
+
+	for (Mesh *mesh: objects)
+	{
+		delete mesh;
+	}
+	objects.clear();
+
 }

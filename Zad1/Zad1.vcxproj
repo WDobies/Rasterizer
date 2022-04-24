@@ -141,22 +141,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ColorBuffer.cpp" />
+    <ClCompile Include="Cone.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
     <ClCompile Include="Matrix4.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Sphere.cpp" />
-    <ClCompile Include="Triangle.cpp" />
+    <ClCompile Include="Rasterizer.cpp" />
     <ClCompile Include="Vector3.cpp" />
     <ClCompile Include="Vector4.cpp" />
     <ClCompile Include="RenderingAlghortims.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColorBuffer.h" />
+    <ClInclude Include="Cone.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="DepthBuffer.h" />
     <ClInclude Include="Matrix4.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stb_image_write.h" />
-    <ClInclude Include="Triangle.h" />
+    <ClInclude Include="Rasterizer.h" />
     <ClInclude Include="Vector3.h" />
     <ClInclude Include="Vector4.h" />
   </ItemGroup>

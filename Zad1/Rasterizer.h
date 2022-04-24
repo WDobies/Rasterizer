@@ -2,14 +2,11 @@
 #include "Vector3.h"
 #include "ColorBuffer.h"
 #include "Matrix4.h"
-class Triangle
+class Rasterizer
 {
 public:
 
-    Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height);
-
-    int width;
-    int height;
+    Rasterizer(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1= Vector3(255,0,0), Vector3 c2 = Vector3(0, 255, 0), Vector3 c3 = Vector3(0, 0, 255));
 
     Vector3 v1;
     Vector3 v2;
