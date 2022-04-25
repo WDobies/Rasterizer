@@ -15,8 +15,8 @@ int main()
 {
 	ColorBuffer buffer(WIDTH, HEIGHT);
 
-	Mesh *cylinder = new Cylinder(20,2,0.9);
-	Mesh *sphere = new Sphere(15, 15);
+	Mesh *cylinder = new Cylinder(25,25,0.9);
+	Mesh *sphere = new Sphere(9, 9);
 	Mesh* cone = new Cone(15);
 
 	Matrix4 obj2view;
@@ -26,8 +26,8 @@ int main()
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	//cylinder->SetColor(Vector3(255, 0, 0));
-	cylinder->SetTranslation(Vector3(2, 1, 8));
-	cylinder->SetRotation(Vector3(1, 0, 0), 30);
+	cylinder->SetTranslation(Vector3(0, -1, 15));
+	//cylinder->SetRotation(Vector3(1, 0, 0), 180);
 	cylinder->SetView(obj2view, camera);
 
 	sphere->SetTranslation(Vector3(0, -1, 9));
@@ -37,7 +37,7 @@ int main()
 	cone->SetRotation(Vector3(1, 0, 0), 30);
 	cone->SetView(obj2view, camera);
 
-	std::vector<Mesh*> objects = { cylinder,sphere,cone };
+	std::vector<Mesh*> objects = { cylinder};
 
 	for (int i = 0; i < HEIGHT; i++)
 	{

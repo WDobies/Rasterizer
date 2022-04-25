@@ -12,6 +12,8 @@ public:
 
 	Vector3* vertices;
 	Vector3* indices;
+	Vector3* normal;
+	Vector3* color;
 
 	std::vector<Rasterizer> triangles;
 
@@ -21,8 +23,6 @@ public:
 	void SetView(Matrix4 obj2view, Matrix4 camera);
 	void Draw(int& i, int& j, ColorBuffer& buffer);
 	void SetColor(Vector3 color);
-
-
 
 	~Mesh();
 };

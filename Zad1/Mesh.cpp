@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include <iostream>
 
 void Mesh::SetTranslation(Vector3 transform)
 {
@@ -52,6 +53,6 @@ void Mesh::SetColor(Vector3 color)
 
 Mesh::~Mesh()
 {
-	delete[] vertices, indices;
+	delete[] vertices, indices, normal, color;
 	triangles.clear();
 }

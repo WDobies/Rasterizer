@@ -48,6 +48,9 @@
     <ClCompile Include="Cone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Rasterizer.h">
@@ -86,5 +89,13 @@
     <ClInclude Include="Cone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Image.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
