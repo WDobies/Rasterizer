@@ -4,6 +4,7 @@ ColorBuffer::ColorBuffer(int width, int height) : width(width), height(height)
 {
 	lenght = width * height;
 	data = new unsigned char[lenght * 3];
+	FillColor(0, 0, 0);
 }
 
 void ColorBuffer::FillColor(int r, int g, int b)

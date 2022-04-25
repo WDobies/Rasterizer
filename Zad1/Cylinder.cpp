@@ -1,18 +1,27 @@
-#include "Sphere.h"
-#include <iostream>
+#include "Cylinder.h"
 
-Sphere::Sphere(int vert, int horiz)
+Cylinder::Cylinder(int vert, int horiz, float radius)
 {
 	tSize = 2 * vert * horiz;
 	vSize = vert * (horiz + 2);
+	float x, y, z, r;
 
-	float x,y,z, r;
-
-	for (int yy = 0; yy <= horiz+1; ++yy)
+	for (int yy = 0; yy <= horiz + 1; ++yy)
 	{
 		y = cos(yy * 3.1415926 / (horiz + 1));
 		float temp = 1 - y * y;
-		r = sqrt(temp);
+
+		if (yy == 0)
+		{
+			r = 0;
+			y = cos((yy + 1) * 3.1415926 / (horiz + 1));
+		}
+		else if (yy == horiz + 1)
+		{
+			r = 0;
+			y = cos((yy - 1) * 3.1415926 / (horiz + 1));
+		}
+		else r = radius;
 
 		for (int rr = 0; rr < vert; ++rr)
 		{
@@ -33,7 +42,7 @@ Sphere::Sphere(int vert, int horiz)
 			));
 			indices.push_back(Vector3(
 				rr + vert + yy * vert,
-				rr+2*vert + yy*vert,				
+				rr + 2 * vert + yy * vert,
 				(rr + 1) % vert + vert + yy * vert
 			));
 		}
@@ -44,4 +53,3 @@ Sphere::Sphere(int vert, int horiz)
 		triangles.push_back(Triangle(vertices[(int)indices[i].y], vertices[(int)indices[i].x], vertices[(int)indices[i].z], Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), 1000, 1000));
 	}
 }
-
