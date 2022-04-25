@@ -9,6 +9,8 @@ Sphere::Sphere(int vert, int horiz)
 
 	vertices = new Vector3[vSize];
 	indices = new Vector3[tSize];
+	normal = new Vector3[vSize];
+	color = new Vector3[vSize];
 
 	float x,y,z,r;
 
@@ -41,6 +43,29 @@ Sphere::Sphere(int vert, int horiz)
 				(rr + 1) % vert + vert + yy * vert
 			);
 		}
+	}
+
+
+	Vector3 n;
+	for (int i = 0; i < vSize; ++i)
+	{
+		normal[i] = Vector3(0, 0, 0);
+	}
+	for (int i = 0; i < tSize; ++i)
+	{
+		Vector3 a1 = vertices[(int)indices[i].z] - vertices[(int)indices[i].x];
+		Vector3 a2 = vertices[(int)indices[i].y] - vertices[(int)indices[i].x];
+
+		n = Vector3::Cross(a1, a2);
+		n = Vector3::Normalize(n);
+
+		normal[i] += n;
+
+	}
+	for (int i = 0; i < vSize; ++i)
+	{
+		normal[i] = normal[i].Normalize();
+		//std::cout << normal[i].ToString() << "\n";
 	}
 
 	for (int i = 0; i < tSize; i++)

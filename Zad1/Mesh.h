@@ -17,6 +17,7 @@ public:
 
 	std::vector<Rasterizer> triangles;
 
+	void SetLight();
 	void SetTranslation(Vector3 transform);
 	void SetRotation(Vector3 axis, float angle);
 	void SetScale(Vector3 scale);

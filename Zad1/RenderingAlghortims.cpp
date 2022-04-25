@@ -17,7 +17,6 @@ int main()
 
 	Mesh *cylinder = new Cylinder(25,25,0.9);
 	Mesh *sphere = new Sphere(9, 9);
-	Mesh* cone = new Cone(15);
 
 	Matrix4 obj2view;
 	obj2view.Perspective(50, 1.f, 0.1f, 100.f);
@@ -26,18 +25,17 @@ int main()
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	//cylinder->SetColor(Vector3(255, 0, 0));
-	cylinder->SetTranslation(Vector3(0, -1, 15));
-	//cylinder->SetRotation(Vector3(1, 0, 0), 180);
+	cylinder->SetTranslation(Vector3(0, -2, 15));
+	cylinder->SetRotation(Vector3(1, 1, 1), 30);
+	//cylinder->SetLight();
 	cylinder->SetView(obj2view, camera);
 
 	sphere->SetTranslation(Vector3(0, -1, 9));
+	//sphere->SetLight();
 	sphere->SetView(obj2view, camera);
 
-	cone->SetTranslation(Vector3(-3, -1, 11));
-	cone->SetRotation(Vector3(1, 0, 0), 30);
-	cone->SetView(obj2view, camera);
 
-	std::vector<Mesh*> objects = { cylinder};
+	std::vector<Mesh*> objects = { cylinder, sphere};
 
 	for (int i = 0; i < HEIGHT; i++)
 	{
