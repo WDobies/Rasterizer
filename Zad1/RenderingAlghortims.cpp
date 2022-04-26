@@ -9,6 +9,7 @@
 #include <vector>
 #include "Cylinder.h"
 #include "Cone.h"
+#include "DirectionalLight.h"
 
 int main()
 {
@@ -23,10 +24,8 @@ int main()
 	}
 
 	Sphere sphere(15, 15);
-	Cylinder cylinder(6, 6);
-	Cone cone(4, 0.5f);
-
-
+	//Cylinder cylinder(6, 6);
+	//Cone cone(4, 0.5f);
 
 	Matrix4 obj2view;
 	obj2view.Perspective(50, 1.f, 0.1f, 100.f);
@@ -34,27 +33,30 @@ int main()
 	Matrix4 camera;
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
+	DirectionalLight dl;
+	//dl.Calculate(camera, obj2view, sphere.vSize, sphere.normals, sphere.vertices, sphere.colors, sphere.indices, sphere.triangles);
+
 	for (auto& t : sphere.triangles)
 	{
-		t.SetTranslation(Vector3(0, 2.0f, 8));
-		t.SetRotation(Vector3(1, 0, 0), 20);
+		t.SetTranslation(Vector3(0, 0.0f, 5));
+		//t.SetRotation(Vector3(1, 0, 0), 90);
 		t.SetView(obj2view, camera);
 	}
 
-	for (auto& t : cylinder.triangles)
-	{
-		t.SetTranslation(Vector3(0, -1.0f, 5));
-		t.SetRotation(Vector3(1, 0, 0), 20);
-		t.SetView(obj2view, camera);
-	}
-	for (auto& t : cone.triangles)
-	{
-		t.SetTranslation(Vector3(2, -0.5f, 5));
-		t.SetRotation(Vector3(1, 0, 0), 20);
-		t.SetView(obj2view, camera);
-	}
+	//for (auto& t : cylinder.triangles)
+	//{
+	//	t.SetTranslation(Vector3(0, -1.0f, 5));
+	//	t.SetRotation(Vector3(1, 0, 0), 20);
+	//	t.SetView(obj2view, camera);
+	//}
+	//for (auto& t : cone.triangles)
+	//{
+	//	t.SetTranslation(Vector3(2, -0.5f, 5));
+	//	t.SetRotation(Vector3(1, 0, 0), 20);
+	//	t.SetView(obj2view, camera);
+	//}
 	std::vector<Mesh> figures;
-	figures = { sphere,cylinder,cone };
+	figures = { sphere};
 	for (int i = 0; i < HEIGHT; i++)
 	{
 		for (int j = 0; j < WIDTH; j++)
@@ -66,7 +68,6 @@ int main()
 					g.Draw(i, j, buffer);
 				}
 			}
-
 		}
 	}
 

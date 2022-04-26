@@ -40,6 +40,7 @@ public:
     void SetRotation(Vector3 axis, float angle);
     void SetScale(Vector3 s);
 
+    Matrix4 model;
 private:
     float dx12;
     float dx23;
@@ -55,6 +56,6 @@ private:
     bool tl2;
     bool tl3;
 
-    Matrix4 model;
+
 };
 

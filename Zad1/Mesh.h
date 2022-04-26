@@ -10,7 +10,11 @@ public:
 
 	std::vector<Vector3> vertices;
 	std::vector<Vector3> indices;
+	std::vector<Vector3> normals;
+	std::vector<Vector3> colors;
 
 	std::vector<Triangle> triangles;
+
+	void CalculateNormals();
 };
 

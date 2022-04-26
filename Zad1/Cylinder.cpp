@@ -48,6 +48,8 @@ Cylinder::Cylinder(int vert, int horiz, float radius)
 		}
 	}
 
+	CalculateNormals();
+
 	for (int i = 0; i < tSize; i++)
 	{
 		triangles.push_back(Triangle(vertices[(int)indices[i].y], vertices[(int)indices[i].x], vertices[(int)indices[i].z], Vector3(255, 0, 0), Vector3(0, 255, 0), Vector3(0, 0, 255), 1000, 1000));
