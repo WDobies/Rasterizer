@@ -7,7 +7,7 @@ void DirectionalLight::Calculate(Matrix4& camera, Matrix4& obj2view, int& vSize,
 	for (int i = 0; i < vSize; ++i)
 	{
 		Matrix4 model;
-		model = model.Translate(model, Vector3(1, 0, 9));
+		model = model.Translate(model, Vector3(0, 0, 4));
 		//model = model.Rotate(model,Vector3(1, 0, 0), 45);
 		Vector4 g = obj2view * camera * model * Vector4(normals[i], 1);
 		Vector4 p = obj2view * camera * model * Vector4(-vertices[i], 1);
@@ -15,32 +15,32 @@ void DirectionalLight::Calculate(Matrix4& camera, Matrix4& obj2view, int& vSize,
 		N = N.Normalize();
 		Vector3 V = Vector3(p.x, p.y, p.z);
 
-		Vector3 xd = Vector3(1, 0, 0);
+		Vector3 xd = Vector3(0.2f, 0, 0);
 		Vector4 gg = obj2view * camera * Vector4(xd, 1);
 		Vector3 fg = Vector3(gg.x, gg.y, gg.z);
 		fg = fg.Normalize();
 		Vector3 R = (N * 2 * (Vector3::Dot(fg, N))) - fg;
 		float diff = Vector3::Dot(fg, N);
-		float specular = Vector3::Dot(R, V);
+		float specular = Vector3::Dot(R = Vector3::Normalize(R), V=Vector3::Normalize(V));
 		//specular = 1 / specular;
-		std::cout << specular << "\n";
-		//if (diff < 0) diff = 0;
+		//std::cout << diff << "\n";
+		if (diff < 0) diff = 0;
 		//if (diff > 1) diff = 1;
 		Vector3 spec;
 		if (specular > 0) {
-			specular = pow(specular, 1);
+			specular = pow(specular, 4);
 
-			spec = Vector3(255, 255, 255) * specular * 0.03;
+			spec = Vector3(255, 255, 255) * specular * 0.7f ;
 		}
-		else { spec = Vector3(0, 0, 0); }
+		//else { spec = Vector3(0, 0, 0); }
 		
 		//if (specular < 0) specular = 0;
 		//if (specular > 0) specular = 1;
 
-		Vector3 dif = Vector3(0, 255, 0) * diff;
+		Vector3 dif = Vector3(140, 0, 0) * diff;
 
-		Vector3 amb(100, 0, 0);
-		color.push_back( dif + amb + spec );
+		Vector3 amb(30, 0, 0);
+		color.push_back( dif + spec + amb );
 		if (color[i].x > 255) color[i].x = 255;
 		if (color[i].y > 255) color[i].y = 255;
 		if (color[i].z > 255) color[i].z = 255;

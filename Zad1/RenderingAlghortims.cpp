@@ -23,7 +23,7 @@ int main()
 		}
 	}
 
-	Sphere sphere(15, 15);
+	Sphere sphere(35, 35);
 	//Cylinder cylinder(6, 6);
 	//Cone cone(4, 0.5f);
 
