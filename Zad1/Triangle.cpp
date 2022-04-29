@@ -11,11 +11,11 @@ Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, V
 	model = Matrix4::Identity();
 }
 
-void Triangle::SetView(Matrix4 obj2view, Matrix4 camera) {
+void Triangle::SetView(Matrix4 obj2view, Matrix4 camera, Matrix4 m) {
 
-	Vector4 p1 = obj2view * camera * model * Vector4(v1, 1);
-	Vector4 p2 = obj2view * camera * model * Vector4(v2, 1);
-	Vector4 p3 = obj2view * camera * model * Vector4(v3, 1);
+	Vector4 p1 = obj2view * camera * m * Vector4(v1, 1);
+	Vector4 p2 = obj2view * camera * m * Vector4(v2, 1);
+	Vector4 p3 = obj2view * camera * m * Vector4(v3, 1);
 
 	this->v1 = Vector3(p1.x / p1.w, p1.y / p1.w, p1.z / p1.w);
 	this->v2 = Vector3(p2.x / p2.w, p2.y / p2.w, p2.z / p2.w);

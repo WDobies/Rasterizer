@@ -25,3 +25,26 @@ void Mesh::CalculateNormals()
 		normals[i] = normals[i].Normalize();
 	}
 }
+
+void Mesh::SetCamera(Matrix4& camera)
+{
+	this->camera = camera;
+}
+
+void Mesh::SetProjection(Matrix4& projection)
+{
+	this->projection = projection;
+}
+
+void Mesh::SetModelMatrix(Matrix4& model)
+{
+	this->model = model;
+}
+
+void Mesh::SetView()
+{
+	for (auto& i : triangles)
+	{
+		i.SetView(projection, camera, model);
+	}
+}

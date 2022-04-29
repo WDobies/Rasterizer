@@ -3,9 +3,11 @@
 #include "Matrix4.h"
 #include <vector>
 #include "Triangle.h"
+#include "Mesh.h"
 class DirectionalLight : public Light
 {
 public:
-	void Calculate(Matrix4& camera, Matrix4& obj2view, int& vSize, std::vector<Vector3>& normals, std::vector<Vector3>& vertices , std::vector<Vector3>& color, std::vector<Vector3>& indices, std::vector<Triangle>& triangles);
+	DirectionalLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vector3 specular, int shininess = 8, float specularStrenght = 1.f);
+	void Calculate(Mesh& mesh);
 };
 
