@@ -17,9 +17,9 @@ int main()
 
 
 
-	Sphere sphere(9, 9);
+	Sphere sphere(14, 14);
 	//Cylinder cylinder(6, 6);
-	Sphere cone(9, 9);
+	Cone cone(25, 0.6);
 
 	Matrix4 obj2view;
 	obj2view.Perspective(50, 1.f, 0.1f, 100.f);
@@ -28,12 +28,12 @@ int main()
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	Matrix4 model;
-	model = model.Translate(model, Vector3(-2, 0, 9));
+	model = model.Translate(model, Vector3(2, 2, 14));
 	model = model.Rotate(model, Vector3(1, 0, 1), 45);
 
 	Matrix4 m;
-	m = m.Translate(m, Vector3(1, 0, 9));
-	m = m.Rotate(m, Vector3(1, 0, 1), 45);
+	m = m.Translate(m, Vector3(-2, 2, 8));
+	m = m.Rotate(m, Vector3(1, 1, 0), 14);
 
 	sphere.SetModelMatrix(model);
 	sphere.SetCamera(camera);
@@ -46,7 +46,7 @@ int main()
 	sphere.SetView();
 	cone.SetView();
 
-	DirectionalLight dl(Vector3(8, 0, 8), Vector3(30,0,0),Vector3(255,0,0),Vector3(255,255,255));
+	DirectionalLight dl(Vector3(0.9f, 0.0, -0.4f), Vector3(30,0,0),Vector3(255,0,0),Vector3(255,255,255));
 
 	dl.Calculate(sphere);
 	dl.Calculate(cone);
