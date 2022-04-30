@@ -56,9 +56,9 @@ void DirectionalLight::Calculate(Mesh& mesh)
 	int i = 0;
 	for (auto& t : mesh.triangles)
 	{
-		t.colorV1 += mesh.colors[(int)mesh.indices[i].y];
-		t.colorV2 += mesh.colors[(int)mesh.indices[i].x];
-		t.colorV3 += mesh.colors[(int)mesh.indices[i].z];
+		t.colorV1 = mesh.colors[(int)mesh.indices[i].y];
+		t.colorV2 = mesh.colors[(int)mesh.indices[i].x];
+		t.colorV3 = mesh.colors[(int)mesh.indices[i].z];
 		i++;
 	}
 }

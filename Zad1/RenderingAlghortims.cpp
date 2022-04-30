@@ -10,6 +10,7 @@
 #include "Cylinder.h"
 #include "Cone.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
 
 int main()
 {
@@ -17,8 +18,8 @@ int main()
 
 
 
-	Sphere sphere(14, 14);
-	//Cylinder cylinder(6, 6);
+	Sphere sphere(15, 14);
+	Cylinder cylinder(15, 15);
 	Cone cone(25, 0.6);
 
 	Matrix4 obj2view;
@@ -28,12 +29,16 @@ int main()
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	Matrix4 model;
-	model = model.Translate(model, Vector3(2, 2, 14));
-	model = model.Rotate(model, Vector3(1, 0, 1), 45);
+	model = model.Translate(model, Vector3(1, 2, 14));
+	//model = model.Rotate(model, Vector3(1, 0, 1), 45);
 
 	Matrix4 m;
-	m = m.Translate(m, Vector3(-2, 2, 8));
-	m = m.Rotate(m, Vector3(1, 1, 0), 14);
+	m = m.Translate(m, Vector3(-1, 1, 14));
+	m = m.Rotate(m, Vector3(1, 0, 1), 45);
+
+	Matrix4 mC;
+	mC = mC.Translate(mC, Vector3( -1, -2, 14));
+	mC = mC.Rotate(mC, Vector3(-1, 0, 1), 60);
 
 	sphere.SetModelMatrix(model);
 	sphere.SetCamera(camera);
@@ -43,16 +48,26 @@ int main()
 	cone.SetCamera(camera);
 	cone.SetProjection(obj2view);
 
+	cylinder.SetModelMatrix(mC);
+	cylinder.SetCamera(camera);
+	cylinder.SetProjection(obj2view);
+
 	sphere.SetView();
 	cone.SetView();
+	cylinder.SetView();
 
-	DirectionalLight dl(Vector3(0.9f, 0.0, -0.4f), Vector3(30,0,0),Vector3(255,0,0),Vector3(255,255,255));
+	DirectionalLight dl(Vector3(0.9f, 0.0, -0.4f), Vector3(0,0,0),Vector3(0,0,0),Vector3(0,0,0));
+	PointLight pl(Vector3(1,1,1), Vector3(0, 0, 30), Vector3(0, 0, 170), Vector3(255, 255, 255));
 
 	dl.Calculate(sphere);
+	pl.Calculate(sphere);
 	dl.Calculate(cone);
+	pl.Calculate(cone);
+	dl.Calculate(cylinder);
+	pl.Calculate(cylinder);
 
 	std::vector<Mesh> figures;
-	figures = { sphere,cone};
+	figures = { sphere,cone, cylinder};
 	for (int i = 0; i < HEIGHT; i++)
 	{
 		for (int j = 0; j < WIDTH; j++)
