@@ -13,7 +13,7 @@ DirectionalLight::DirectionalLight(Vector3 position, Vector3 ambient, Vector3 di
 
 void DirectionalLight::Calculate(Mesh& mesh)
 {
-
+	if (!mesh.colors.empty()) mesh.colors.clear();
 	for (int i = 0; i < mesh.vSize; ++i)
 	{
 		//vertices and normals
@@ -56,9 +56,9 @@ void DirectionalLight::Calculate(Mesh& mesh)
 	int i = 0;
 	for (auto& t : mesh.triangles)
 	{
-		t.colorV1 = mesh.colors[(int)mesh.indices[i].y];
-		t.colorV2 = mesh.colors[(int)mesh.indices[i].x];
-		t.colorV3 = mesh.colors[(int)mesh.indices[i].z];
+		t.colorV1 += mesh.colors[(int)mesh.indices[i].y];
+		t.colorV2 += mesh.colors[(int)mesh.indices[i].x];
+		t.colorV3 += mesh.colors[(int)mesh.indices[i].z];
 		i++;
 	}
 }

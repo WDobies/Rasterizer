@@ -43,8 +43,36 @@ void Mesh::SetModelMatrix(Matrix4& model)
 
 void Mesh::SetView()
 {
-	for (auto& i : triangles)
+	for (auto& t : triangles)
 	{
-		i.SetView(projection, camera, model);
+		t.SetView(projection, camera, model);
+	}
+}
+
+void Mesh::SetColor(const Vector3& color)
+{
+	for (auto& t : triangles)
+	{
+		t.colorV1 = color;
+		t.colorV2 = color;
+		t.colorV3 = color;
+	}
+}
+
+void Mesh::SetColorPerVertex(const Vector3& v1, const Vector3& v2, const Vector3& v3)
+{
+	for (auto& t : triangles)
+	{
+		t.colorV1 = v1;
+		t.colorV2 = v2;
+		t.colorV3 = v3;
+	}
+}
+
+void Mesh::Draw(int& i, int& j, ColorBuffer& buffer)
+{
+	for (auto& t : triangles)
+	{
+		t.Draw(i, j, buffer);
 	}
 }

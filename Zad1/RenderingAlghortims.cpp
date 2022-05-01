@@ -16,11 +16,9 @@ int main()
 {
 	ColorBuffer buffer(WIDTH, HEIGHT);
 
-
-
 	Sphere sphere(15, 15);
-	Sphere cone(15, 15);
-	Sphere cylinder(15, 15);
+	Cone cone(15, 1);
+	Cylinder cylinder(15, 5);
 
 	Matrix4 obj2view;
 	obj2view.Perspective(50, 1.f, 0.1f, 100.f);
@@ -28,57 +26,53 @@ int main()
 	Matrix4 camera;
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
-	Matrix4 model;
-	model = model.Translate(model, Vector3(0, -1, 10.4));
+	Matrix4 modelSphere;
+	modelSphere = modelSphere.Translate(modelSphere, Vector3(0, -1, 16));
 	//model = model.Rotate(model, Vector3(1, 0, 1), 45);
 
-	Matrix4 m;
-	m = m.Translate(m, Vector3(-2, 2, 9));
+	Matrix4 modelCone;
+	modelCone = modelCone.Translate(modelCone, Vector3(-2, 2, 9));
 	//m = m.Rotate(m, Vector3(1, 0, 1), 45);
 
-	Matrix4 mC;
-	mC = mC.Translate(mC, Vector3( 3, -1, 9));
-	//mC = mC.Rotate(mC, Vector3(-1, 0, 1), 60);
+	Matrix4 modelCylinder;
+	modelCylinder = modelCylinder.Translate(modelCylinder, Vector3( 3, -1, 9));
+	modelCylinder = modelCylinder.Rotate(modelCylinder, Vector3(-1, 0, 1), 15);
 
-	sphere.SetModelMatrix(model);
+	sphere.SetModelMatrix(modelSphere);
 	sphere.SetCamera(camera);
 	sphere.SetProjection(obj2view);
 
-	cone.SetModelMatrix(m);
+	cone.SetModelMatrix(modelCone);
 	cone.SetCamera(camera);
 	cone.SetProjection(obj2view);
 
-	cylinder.SetModelMatrix(mC);
+	cylinder.SetModelMatrix(modelCylinder);
 	cylinder.SetCamera(camera);
 	cylinder.SetProjection(obj2view);
 
-	sphere.SetView();
-	cone.SetView();
-	cylinder.SetView();
-
-	DirectionalLight dl(Vector3(0.9f, 0.0, -0.4f), Vector3(0,0,0),Vector3(0,0,0),Vector3(0,0,0));
-	PointLight pl(Vector3(0,0.4, 10), Vector3(0, 0, 30), Vector3(0, 0, 170), Vector3(255, 255, 255));
-
-	dl.Calculate(sphere);
-	pl.Calculate(sphere);
-	dl.Calculate(cone);
-	pl.Calculate(cone);
-	dl.Calculate(cylinder);
-	pl.Calculate(cylinder);
-
+	DirectionalLight dl(Vector3(-0.9f, 0.0, 0.6f), Vector3(30,0,0),Vector3(140,0,0),Vector3(255,255,255));
+	PointLight pl(Vector3(3,3, 10), Vector3(0, 0, 30), Vector3(0, 0, 170), Vector3(255, 255, 255));
 
 	std::vector<Mesh> figures;
 	figures = { sphere, cone, cylinder };
+
+	for (auto& f: figures)
+	{
+		f.SetView();
+		pl.Calculate(f);
+		dl.Calculate(f);
+	}
+
+	figures[2].SetColorPerVertex(Vector3(0, 255, 0), Vector3(0, 0, 255), Vector3(255, 0, 0));
+
+
 	for (int i = 0; i < HEIGHT; i++)
 	{
 		for (int j = 0; j < WIDTH; j++)
 		{
 			for (auto& t : figures)
 			{
-				for (auto& g : t.triangles)
-				{
-					g.Draw(i, j, buffer);
-				}
+				t.Draw(i, j, buffer);
 			}
 		}
 	}

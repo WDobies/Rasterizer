@@ -13,11 +13,11 @@ PointLight::PointLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vecto
 
 void PointLight::Calculate(Mesh& mesh)
 {
-	mesh.colors.clear();
+	if (!mesh.colors.empty()) mesh.colors.clear();
 	for (int i = 0; i < mesh.vSize; ++i)
 	{
 		//vertices and normals
-		Vector4 normals = mesh.model * Vector4(mesh.normals[i], 1);
+		Vector4 normals = mesh.model * Vector4(mesh.normals[i], 0);
 		Vector4 vertices = mesh.model * Vector4(mesh.vertices[i], 1);
 		Vector3 N = Vector3(normals.x, normals.y, normals.z);
 		Vector3 V = Vector3(vertices.x, vertices.y, vertices.z);
@@ -25,36 +25,31 @@ void PointLight::Calculate(Mesh& mesh)
 		N = Vector3::Normalize(N);
 
 		//light position
-		Matrix4 model;
-		//model = Matrix4::Translate(model, Vector3(1, 0, 17));
-		Vector4 pos = model * Vector4(position, 1);
+		Vector4 pos = Vector4(position, 1);
 		Vector3 lightPosition = Vector3(pos.x, pos.y, pos.z);
-		//lightPosition = lightPosition.Normalize();
 		Vector3 L =  lightPosition - V;	
 		
 		L = Vector3::Normalize(L);
-		std::cout << L.ToString() << "\n";
 		V = Vector3::Normalize(V);
 
 		//difffuse
 		float diffuse = Vector3::Dot(L, N);
 		if (diffuse < 0) diffuse = 0;
-		//if (diffuse > 1) diffuse = 1;
 		Vector3 dif = diffuseColor * diffuse;
 
 		//specular
-		Vector3 R = (N * 2 * (Vector3::Dot(L, N))) - L;
+		Vector3 R = L - (N * 2 * (Vector3::Dot(L, N)));
 		R = Vector3::Normalize(R);
 		float specular = Vector3::Dot(R, V);
 		Vector3 spec;
 
 		if (specular > 0)
 		{
-			specular = pow(specular, 2);
-			spec = specularColor * specular * 0.9;
+			specular = pow(specular, shininess);
+			spec = specularColor * specular * specularStrenght;
 		}
 		
-		mesh.colors.push_back(dif + spec + ambientColor);
+		mesh.colors.push_back(dif + spec +ambientColor);
 		if (mesh.colors[i].x > 255) mesh.colors[i].x = 255;
 		if (mesh.colors[i].y > 255) mesh.colors[i].y = 255;
 		if (mesh.colors[i].z > 255) mesh.colors[i].z = 255;
