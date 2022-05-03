@@ -50,8 +50,8 @@ int main()
 	cylinder.SetCamera(camera);
 	cylinder.SetProjection(obj2view);
 
-	DirectionalLight dl(Vector3(-0.9f, 0.0, 0.6f), Vector3(30,0,0),Vector3(140,0,0),Vector3(255,255,255));
-	PointLight pl(Vector3(3,3, 10), Vector3(0, 0, 30), Vector3(0, 0, 170), Vector3(255, 255, 255));
+	DirectionalLight dl(Vector3(0.9f, 0.0, -0.6f), Vector3(30,0,0),Vector3(140,0,0),Vector3(255,255,255));
+	PointLight pl(Vector3(2,0, 10), Vector3(0, 15, 0), Vector3(0, 170, 0), Vector3(255, 255, 255));
 
 	std::vector<Mesh> figures;
 	figures = { sphere, cone, cylinder };
@@ -63,7 +63,7 @@ int main()
 		dl.Calculate(f);
 	}
 
-	figures[2].SetColorPerVertex(Vector3(0, 255, 0), Vector3(0, 0, 255), Vector3(255, 0, 0));
+	//figures[2].SetColorPerVertex(Vector3(0, 255, 0), Vector3(0, 0, 255), Vector3(255, 0, 0));
 
 
 	for (int i = 0; i < HEIGHT; i++)

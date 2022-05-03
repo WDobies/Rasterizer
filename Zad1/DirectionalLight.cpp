@@ -59,6 +59,17 @@ void DirectionalLight::Calculate(Mesh& mesh)
 		t.colorV1 += mesh.colors[(int)mesh.indices[i].y];
 		t.colorV2 += mesh.colors[(int)mesh.indices[i].x];
 		t.colorV3 += mesh.colors[(int)mesh.indices[i].z];
+		if (t.colorV1.x > 255) t.colorV1.x = 255;
+		if (t.colorV1.y > 255) t.colorV1.y = 255;
+		if (t.colorV1.z > 255) t.colorV1.z = 255;
+
+		if (t.colorV2.x > 255) t.colorV2.x = 255;
+		if (t.colorV2.y > 255) t.colorV2.y = 255;
+		if (t.colorV2.z > 255) t.colorV2.z = 255;
+
+		if (t.colorV3.x > 255) t.colorV3.x = 255;
+		if (t.colorV3.y > 255) t.colorV3.y = 255;
+		if (t.colorV3.z > 255) t.colorV3.z = 255;
 		i++;
 	}
 }
