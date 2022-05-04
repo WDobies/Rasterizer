@@ -1,6 +1,10 @@
 #include "DirectionalLight.h"
 #include <iostream>
 
+DirectionalLight::DirectionalLight()
+{
+}
+
 DirectionalLight::DirectionalLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vector3 specular, int shininess, float specularStrenght)
 {
 	this->position = position;
@@ -72,4 +76,31 @@ void DirectionalLight::Calculate(Mesh& mesh)
 		if (t.colorV3.z > 255) t.colorV3.z = 255;
 		i++;
 	}
+}
+
+Vector3 DirectionalLight::CalculatePhong(Triangle& triangle)
+{
+	Vector3 V = -triangle.dv1 * triangle.L1 + -triangle.dv2 * triangle.L2 + -triangle.dv3 * triangle.L3;
+	V = Vector3::Normalize(V);
+	Vector3 N = triangle.n1 * triangle.L1 + triangle.n2 * triangle.L2 + triangle.n3 * triangle.L3;
+	N = Vector3::Normalize(N);
+
+	position = Vector3::Normalize(position);
+
+	float diffuse = Vector3::Dot(position, N);
+	if (diffuse < 0) diffuse = 0;
+	Vector3 dif = diffuseColor * diffuse;
+
+	Vector3 R = position - (N * 2 * (Vector3::Dot(position, N)));
+	R = Vector3::Normalize(R);
+	float specular = Vector3::Dot(R, V);
+	Vector3 spec;
+
+	if (specular > 0)
+	{
+		specular = pow(specular, 99);
+		spec = specularColor * specular * 0.9;
+	}
+
+	return spec + dif + ambientColor;
 }

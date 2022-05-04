@@ -5,9 +5,12 @@
 #include "DepthBuffer.h"
 
 
-Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height) : 
-	v1(v1), v2(v2), v3(v3), colorV1(c1), colorV2(c2), colorV3(c3), width(width), height(height)
+Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height) : 
+	v1(v1), v2(v2), v3(v3), n1(n1), n2(n2), n3(n3),colorV1(c1), colorV2(c2), colorV3(c3), width(width), height(height)
 {
+	dv1 = v1;
+	dv2 = v2;
+	dv3 = v3;
 	model = Matrix4::Identity();
 }
 
@@ -47,9 +50,6 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer)
 		float depth = L1 * v1.z + L2 * v2.z + L3 * v3.z;
 		if (depth < DEPTHBUFFER[i * HEIGHT + j])
 		{
-			//R[i * HEIGHT + j]= t.R;
-			//G[i * HEIGHT + j] = t.G;
-			//B[i * HEIGHT + j] = t.B;
 			buffer.SetColor(j, i, R, G, B);
 			DEPTHBUFFER[i * HEIGHT + j] = depth;
 		}
@@ -81,6 +81,36 @@ void Triangle::Lambda(int& i, int& j)
 	L2 = (dy31 * (j - v3.x) + dx13 * (i - v3.y)) / (dy31 * dx23 + dx13 * dy23);
 	L3 = 1 - L2 - L1;
 
+	Vector3 V = -dv1 * L1 + -dv2 * L2 + -dv3 * L3;
+	V = Vector3::Normalize(V);
+	Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
+	N = Vector3::Normalize(N);
+
+	Vector3 lightPosition(0.2, 0, -0.5);
+	lightPosition = lightPosition.Normalize();
+
+	float diffuse = Vector3::Dot(lightPosition, N);
+	if (diffuse < 0) diffuse = 0;
+	Vector3 dif = Vector3(255,0,0) * diffuse;
+
+	Vector3 Rr = lightPosition - (N * 2 * (Vector3::Dot(lightPosition, N)));
+	Rr = Vector3::Normalize(Rr);
+	float specular = Vector3::Dot(Rr, V);
+	Vector3 spec;
+
+	if (specular > 0)
+	{
+		specular = pow(specular, 99);
+		spec = Vector3(255,255,255) * specular * 0.9;
+	}
+
+	colorV1 = dif + spec + Vector3(40, 0, 0);
+	colorV2 = dif + spec + Vector3(40, 0, 0);
+	colorV3 = dif + spec + Vector3(40, 0, 0);
+
+	CutColorRange();
+	//std::cout << p.ToString() << "\n";
+
 	//color for each pixel
 	R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
 	G = L1 * colorV1.y + L2 * colorV2.y + L3 * colorV3.y;
@@ -100,6 +130,19 @@ void Triangle::SetRotation(Vector3 axis, float angle)
 void Triangle::SetScale(Vector3 s)
 {
 	model = Matrix4::Scale(model, s);
+}
+
+void Triangle::CutColorRange()
+{
+	if (colorV1.x > 255) colorV1.x = 255;
+	if (colorV1.y > 255) colorV1.y = 255;
+	if (colorV1.z > 255) colorV1.z = 255;
+	if (colorV2.x > 255) colorV2.x = 255;
+	if (colorV2.y > 255) colorV2.y = 255;
+	if (colorV2.z > 255) colorV2.z = 255;
+	if (colorV3.x > 255) colorV3.x = 255;
+	if (colorV3.y > 255) colorV3.y = 255;
+	if (colorV3.z > 255) colorV3.z = 255;
 }
 
 bool Triangle::isInsideTriangle(int &i, int &j)

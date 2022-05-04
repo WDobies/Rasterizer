@@ -6,7 +6,7 @@ class Triangle
 {
 public:
 
-    Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height);
+    Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height);
 
     int width;
     int height;
@@ -14,6 +14,10 @@ public:
     Vector3 v1;
     Vector3 v2;
     Vector3 v3;
+
+    Vector3 dv1, dv2, dv3;
+
+    Vector3 n1,n2,n3;
 
     Vector3 colorV1;
     Vector3 colorV2;
@@ -30,8 +34,7 @@ public:
     float L2;
     float L3;
 
-    void PixelCoords();
-    void MinSpace();
+
     bool isInsideTriangle(int &i, int &j);
     void Draw(int& i, int& j, ColorBuffer& buffer);
     void Lambda(int& i, int& j);
@@ -39,9 +42,14 @@ public:
     void SetTranslation(Vector3 t);
     void SetRotation(Vector3 axis, float angle);
     void SetScale(Vector3 s);
+    
 
     Matrix4 model;
 private:
+    void PixelCoords();
+    void MinSpace();
+    void CutColorRange();
+
     float dx12;
     float dx23;
     float dx31;

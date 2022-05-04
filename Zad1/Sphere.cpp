@@ -43,7 +43,7 @@ Sphere::Sphere(int vert, int horiz)
 
 	for (int i = 0; i < tSize; i++)
 	{
-		triangles.push_back(Triangle(vertices[(int)indices[i].y], vertices[(int)indices[i].x], vertices[(int)indices[i].z], Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1000, 1000));
+		triangles.push_back(Triangle(vertices[(int)indices[i].y], vertices[(int)indices[i].x], vertices[(int)indices[i].z], normals[(int)indices[i].y], normals[(int)indices[i].x], normals[(int)indices[i].z], Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), 1000, 1000));
 	}
 }
 

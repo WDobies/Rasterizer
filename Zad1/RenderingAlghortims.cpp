@@ -16,9 +16,10 @@ int main()
 {
 	ColorBuffer buffer(WIDTH, HEIGHT);
 
-	Sphere sphere(15, 15);
-	Cone cone(15, 1);
-	Cylinder cylinder(15, 5);
+	Sphere sphere(4, 4);
+	//Sphere sph1(15, 15);
+	//Cone cone(15, 1);
+	//Cylinder cylinder(15, 5);
 
 	Matrix4 obj2view;
 	obj2view.Perspective(50, 1.f, 0.1f, 100.f);
@@ -27,44 +28,50 @@ int main()
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	Matrix4 modelSphere;
-	modelSphere = modelSphere.Translate(modelSphere, Vector3(0, -1, 16));
+	modelSphere = modelSphere.Translate(modelSphere, Vector3(0, -1, 7));
 	//model = model.Rotate(model, Vector3(1, 0, 1), 45);
 
-	Matrix4 modelCone;
-	modelCone = modelCone.Translate(modelCone, Vector3(-2, 2, 9));
-	//m = m.Rotate(m, Vector3(1, 0, 1), 45);
+	//Matrix4 mS;
+	//mS = mS.Translate(mS, Vector3(-3, -1, 13));
+	////model = model.Rotate(model, Vector3(1, 0, 1), 45);
 
-	Matrix4 modelCylinder;
-	modelCylinder = modelCylinder.Translate(modelCylinder, Vector3( 3, -1, 9));
-	modelCylinder = modelCylinder.Rotate(modelCylinder, Vector3(-1, 0, 1), 15);
+	//Matrix4 modelCone;
+	//modelCone = modelCone.Translate(modelCone, Vector3(-2, 2, 9));
+	////m = m.Rotate(m, Vector3(1, 0, 1), 45);
+
+	//Matrix4 modelCylinder;
+	//modelCylinder = modelCylinder.Translate(modelCylinder, Vector3( 3, -1, 9));
+	//modelCylinder = modelCylinder.Rotate(modelCylinder, Vector3(-1, 0, 1), 15);
 
 	sphere.SetModelMatrix(modelSphere);
 	sphere.SetCamera(camera);
 	sphere.SetProjection(obj2view);
 
-	cone.SetModelMatrix(modelCone);
-	cone.SetCamera(camera);
-	cone.SetProjection(obj2view);
+	//sph1.SetModelMatrix(mS);
+	//sph1.SetCamera(camera);
+	//sph1.SetProjection(obj2view);
 
-	cylinder.SetModelMatrix(modelCylinder);
-	cylinder.SetCamera(camera);
-	cylinder.SetProjection(obj2view);
+	//cone.SetModelMatrix(modelCone);
+	//cone.SetCamera(camera);
+	//cone.SetProjection(obj2view);
 
-	DirectionalLight dl(Vector3(0.9f, 0.0, -0.6f), Vector3(30,0,0),Vector3(140,0,0),Vector3(255,255,255));
-	PointLight pl(Vector3(2,0, 10), Vector3(0, 15, 0), Vector3(0, 170, 0), Vector3(255, 255, 255));
+	//cylinder.SetModelMatrix(modelCylinder);
+	//cylinder.SetCamera(camera);
+	//cylinder.SetProjection(obj2view);
+
+	DirectionalLight dl(Vector3(0.1f, 0.0, -0.2f), Vector3(50,0,0),Vector3(210,0,0),Vector3(255,255,255));
+	PointLight pl(Vector3(2,0, 10), Vector3(0, 15, 0), Vector3(0, 220, 0), Vector3(255, 255, 255));
 
 	std::vector<Mesh> figures;
-	figures = { sphere, cone, cylinder };
+	figures = { sphere };
 
 	for (auto& f: figures)
 	{
 		f.SetView();
-		pl.Calculate(f);
-		dl.Calculate(f);
+		//f.SetColor(Vector3(255, 255, 0));
+		//pl.Calculate(f);
+		//dl.Calculate(f);
 	}
-
-	//figures[2].SetColorPerVertex(Vector3(0, 255, 0), Vector3(0, 0, 255), Vector3(255, 0, 0));
-
 
 	for (int i = 0; i < HEIGHT; i++)
 	{
