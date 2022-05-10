@@ -9,14 +9,15 @@
 #include <vector>
 #include "Cylinder.h"
 #include "Cone.h"
-#include "DirectionalLight.h"
-#include "PointLight.h"
+#include "DirectionalLightGourad.h"
+#include "PointLightGourad.h"
 
 int main()
 {
 	ColorBuffer buffer(WIDTH, HEIGHT);
 
-	Sphere sphere(4, 4);
+	Sphere sphere(10, 10);
+	Sphere shGourad(10, 10);
 	//Sphere sph1(15, 15);
 	//Cone cone(15, 1);
 	//Cylinder cylinder(15, 5);
@@ -28,7 +29,10 @@ int main()
 	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	Matrix4 modelSphere;
-	modelSphere = modelSphere.Translate(modelSphere, Vector3(0, -1, 7));
+	modelSphere = modelSphere.Translate(modelSphere, Vector3(2, -1, 7));
+
+	Matrix4 mG;
+	mG = mG.Translate(mG, Vector3(-2, -1, 7));
 	//model = model.Rotate(model, Vector3(1, 0, 1), 45);
 
 	//Matrix4 mS;
@@ -47,6 +51,10 @@ int main()
 	sphere.SetCamera(camera);
 	sphere.SetProjection(obj2view);
 
+	shGourad.SetModelMatrix(mG);
+	shGourad.SetCamera(camera);
+	shGourad.SetProjection(obj2view);
+
 	//sph1.SetModelMatrix(mS);
 	//sph1.SetCamera(camera);
 	//sph1.SetProjection(obj2view);
@@ -59,18 +67,20 @@ int main()
 	//cylinder.SetCamera(camera);
 	//cylinder.SetProjection(obj2view);
 
-	DirectionalLight dl(Vector3(0.1f, 0.0, -0.2f), Vector3(50,0,0),Vector3(210,0,0),Vector3(255,255,255));
-	PointLight pl(Vector3(2,0, 10), Vector3(0, 15, 0), Vector3(0, 220, 0), Vector3(255, 255, 255));
+	DirectionalLightGourad dl(Vector3(-0.6, 0, -0.1), Vector3(90,0,0),Vector3(190,0,0),Vector3(180,180,180));
+	PointLightGourad pl(Vector3(5, 0, 2), Vector3(0, 90, 0), Vector3(0, 190, 0), Vector3(255, 255, 255));
 
 	std::vector<Mesh> figures;
 	figures = { sphere };
+
+	shGourad.SetView();
 
 	for (auto& f: figures)
 	{
 		f.SetView();
 		//f.SetColor(Vector3(255, 255, 0));
-		//pl.Calculate(f);
-		//dl.Calculate(f);
+		pl.Calculate(f);
+		dl.Calculate(f);
 	}
 
 	for (int i = 0; i < HEIGHT; i++)
@@ -80,6 +90,10 @@ int main()
 			for (auto& t : figures)
 			{
 				t.Draw(i, j, buffer);
+			}
+			for (auto& t : shGourad.triangles)
+			{
+				t.DrawPD(i, j, buffer);
 			}
 		}
 	}

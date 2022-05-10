@@ -144,11 +144,11 @@
     <ClCompile Include="Cone.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="DepthBuffer.cpp" />
-    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="DirectionalLightGourad.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="PointLightGourad.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Vector3.cpp" />
@@ -160,11 +160,11 @@
     <ClInclude Include="Cone.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="DepthBuffer.h" />
-    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="DirectionalLightGourad.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="PointLight.h" />
+    <ClInclude Include="PointLightGourad.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stb_image_write.h" />
