@@ -47,6 +47,14 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer)
 {
 	if (isInsideTriangle(i, j))
 	{
+		L1 = (dy23 * (j - v3.x) + dx32 * (i - v3.y)) / (dy23 * dx13 + dx32 * dy13);
+		L2 = (dy31 * (j - v3.x) + dx13 * (i - v3.y)) / (dy31 * dx23 + dx13 * dy23);
+		L3 = 1 - L2 - L1;
+
+		R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
+		G = L1 * colorV1.y + L2 * colorV2.y + L3 * colorV3.y;
+		B = L1 * colorV1.z + L2 * colorV2.z + L3 * colorV3.z;
+
 		float depth = L1 * v1.z + L2 * v2.z + L3 * v3.z;
 		if (depth < DEPTHBUFFER[i * HEIGHT + j])
 		{
@@ -58,12 +66,12 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer)
 
 void Triangle::PixelCoords()
 {
-	v1.x = (int)((v1.x + 1) * width * 0.5f);
-	v1.y = (int)((v1.y + 1) * height * 0.5f);
-	v2.x = (int)((v2.x + 1) * width * 0.5f);
-	v2.y = (int)((v2.y + 1) * height * 0.5f);
-	v3.x = (int)((v3.x + 1) * width * 0.5f);
-	v3.y = (int)((v3.y + 1) * height * 0.5f);
+	v1.x = (int)((v1.x + 1) * WIDTH * 0.5f);
+	v1.y = (int)((v1.y + 1) * HEIGHT * 0.5f);
+	v2.x = (int)((v2.x + 1) * WIDTH * 0.5f);
+	v2.y = (int)((v2.y + 1) * HEIGHT * 0.5f);
+	v3.x = (int)((v3.x + 1) * WIDTH * 0.5f);
+	v3.y = (int)((v3.y + 1) * HEIGHT * 0.5f);
 }
 
 void Triangle::MinSpace()
@@ -81,34 +89,34 @@ void Triangle::Lambda(int& i, int& j)
 	L2 = (dy31 * (j - v3.x) + dx13 * (i - v3.y)) / (dy31 * dx23 + dx13 * dy23);
 	L3 = 1 - L2 - L1;
 
-	Vector3 V = -dv1 * L1 + -dv2 * L2 + -dv3 * L3;
-	V = Vector3::Normalize(V);
-	Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
-	N = Vector3::Normalize(N);
+	//Vector3 V = -dv1 * L1 + -dv2 * L2 + -dv3 * L3;
+	//V = Vector3::Normalize(V);
+	//Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
+	//N = Vector3::Normalize(N);
 
-	Vector3 lightPosition(0.2, 0, -0.5);
-	lightPosition = lightPosition.Normalize();
+	//Vector3 lightPosition(0.2, 0, -0.5);
+	//lightPosition = lightPosition.Normalize();
 
-	float diffuse = Vector3::Dot(lightPosition, N);
-	if (diffuse < 0) diffuse = 0;
-	Vector3 dif = Vector3(255,0,0) * diffuse;
+	//float diffuse = Vector3::Dot(lightPosition, N);
+	//if (diffuse < 0) diffuse = 0;
+	//Vector3 dif = Vector3(255,0,0) * diffuse;
 
-	Vector3 Rr = lightPosition - (N * 2 * (Vector3::Dot(lightPosition, N)));
-	Rr = Vector3::Normalize(Rr);
-	float specular = Vector3::Dot(Rr, V);
-	Vector3 spec;
+	//Vector3 Rr = lightPosition - (N * 2 * (Vector3::Dot(lightPosition, N)));
+	//Rr = Vector3::Normalize(Rr);
+	//float specular = Vector3::Dot(Rr, V);
+	//Vector3 spec;
 
-	if (specular > 0)
-	{
-		specular = pow(specular, 99);
-		spec = Vector3(255,255,255) * specular * 0.9;
-	}
+	//if (specular > 0)
+	//{
+	//	specular = pow(specular, 99);
+	//	spec = Vector3(255,255,255) * specular * 0.9;
+	//}
 
-	colorV1 = dif + spec + Vector3(40, 0, 0);
-	colorV2 = dif + spec + Vector3(40, 0, 0);
-	colorV3 = dif + spec + Vector3(40, 0, 0);
+	//colorV1 = dif + spec + Vector3(40, 0, 0);
+	//colorV2 = dif + spec + Vector3(40, 0, 0);
+	//colorV3 = dif + spec + Vector3(40, 0, 0);
 
-	CutColorRange();
+	//CutColorRange();
 	//std::cout << p.ToString() << "\n";
 
 	//color for each pixel
@@ -159,7 +167,6 @@ bool Triangle::isInsideTriangle(int &i, int &j)
 			(f2 == 0 ? tl2 : f2 > 0) &&
 			(f3 == 0 ? tl3 : f3 > 0))
 		{
-			Lambda(i, j);
 			return true;
 		}
 	}
