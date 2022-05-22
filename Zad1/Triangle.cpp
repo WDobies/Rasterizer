@@ -3,10 +3,12 @@
 #include "Matrix4.h"
 #include "ColorBuffer.h"
 #include "DepthBuffer.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
 
 
-Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height) : 
-	v1(v1), v2(v2), v3(v3), n1(n1), n2(n2), n3(n3),colorV1(c1), colorV2(c2), colorV3(c3), width(width), height(height)
+Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector3 t1, Vector3 t2, Vector3 t3) :
+	v1(v1), v2(v2), v3(v3), n1(n1), n2(n2), n3(n3), t1(t1), t2(t2), t3(t3)
 {
 	dv1 = v1;
 	dv2 = v2;
@@ -43,14 +45,51 @@ void Triangle::SetView(Matrix4 obj2view, Matrix4 camera, Matrix4 m) {
 	if (dy31 < 0 || (dy31 == 0 && dx31 > 0)) { tl3 = true; }
 }
 
-void Triangle::Draw(int& i, int& j, ColorBuffer& buffer)
+void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)
 {
 	if (isInsideTriangle(i, j))
 	{
+		//baricentric cords
 		L1 = (dy23 * (j - v3.x) + dx32 * (i - v3.y)) / (dy23 * dx13 + dx32 * dy13);
 		L2 = (dy31 * (j - v3.x) + dx13 * (i - v3.y)) / (dy31 * dx23 + dx13 * dy23);
 		L3 = 1 - L2 - L1;
 
+		Vector3 V = -dv1 * L1 + -dv2 * L2 + -dv3 * L3;
+		Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
+
+		Matrix4 model;
+		model = Matrix4::Translate(model, Vector3(0, -1, 7));
+
+		Vector4 vertices = model * Vector4(V, 1);
+
+		V = Vector3(vertices.x, vertices.y, vertices.z);
+
+		DirectionalLight pl(Vector3(-0.4f, 0.0, -0.7f), Vector3(50, 0, 0), Vector3(210, 0, 0), Vector3(255, 255, 255));
+		//PointLight pl(Vector3(2, 0, -5), Vector3(0, 15, 0), Vector3(0, 220, 0), Vector3(255, 255, 255));
+
+		colorV1 = Vector3(0, 0, 0);
+		colorV2 = Vector3(0, 0, 0);
+		colorV3 = Vector3(0, 0, 0);
+
+		colorV1 = pl.Calculate(V, N);
+		colorV2 = pl.Calculate(V, N);
+		colorV3 = pl.Calculate(V, N);
+		//std::cout <<  t1.y << "\n";
+		
+		//colorV1 = texture.GetColor((texture.width - 1) * t1.x, (texture.height - 1) * t1.y);
+		//colorV2 = texture.GetColor((texture.width - 1) * t2.x, (texture.height - 1) * t2.y);
+		//colorV3 = texture.GetColor((texture.width - 1) * t3.x, (texture.height - 1) * t3.y);
+
+		
+
+		float v = t1.x * L1 + t2.x * L2 + t3.x * L3;
+		float u = t1.y * L1 + t2.y * L2 + t3.y * L3;
+		//std::cout << v << "\n";
+		colorV1 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
+		colorV2 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
+		colorV3 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
+		CutColorRange();
+		//color for each pixel
 		R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
 		G = L1 * colorV1.y + L2 * colorV2.y + L3 * colorV3.y;
 		B = L1 * colorV1.z + L2 * colorV2.z + L3 * colorV3.z;
@@ -84,45 +123,7 @@ void Triangle::MinSpace()
 
 void Triangle::Lambda(int& i, int& j)
 {
-	//baricentric cords
-	L1 = (dy23 * (j - v3.x) + dx32 * (i - v3.y)) / (dy23 * dx13 + dx32 * dy13);
-	L2 = (dy31 * (j - v3.x) + dx13 * (i - v3.y)) / (dy31 * dx23 + dx13 * dy23);
-	L3 = 1 - L2 - L1;
 
-	//Vector3 V = -dv1 * L1 + -dv2 * L2 + -dv3 * L3;
-	//V = Vector3::Normalize(V);
-	//Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
-	//N = Vector3::Normalize(N);
-
-	//Vector3 lightPosition(0.2, 0, -0.5);
-	//lightPosition = lightPosition.Normalize();
-
-	//float diffuse = Vector3::Dot(lightPosition, N);
-	//if (diffuse < 0) diffuse = 0;
-	//Vector3 dif = Vector3(255,0,0) * diffuse;
-
-	//Vector3 Rr = lightPosition - (N * 2 * (Vector3::Dot(lightPosition, N)));
-	//Rr = Vector3::Normalize(Rr);
-	//float specular = Vector3::Dot(Rr, V);
-	//Vector3 spec;
-
-	//if (specular > 0)
-	//{
-	//	specular = pow(specular, 99);
-	//	spec = Vector3(255,255,255) * specular * 0.9;
-	//}
-
-	//colorV1 = dif + spec + Vector3(40, 0, 0);
-	//colorV2 = dif + spec + Vector3(40, 0, 0);
-	//colorV3 = dif + spec + Vector3(40, 0, 0);
-
-	//CutColorRange();
-	//std::cout << p.ToString() << "\n";
-
-	//color for each pixel
-	R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
-	G = L1 * colorV1.y + L2 * colorV2.y + L3 * colorV3.y;
-	B = L1 * colorV1.z + L2 * colorV2.z + L3 * colorV3.z;
 }
 
 void Triangle::SetTranslation(Vector3 t)

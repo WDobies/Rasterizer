@@ -2,11 +2,12 @@
 #include "Vector3.h"
 #include "ColorBuffer.h"
 #include "Matrix4.h"
+#include "Texture.h"
 class Triangle
 {
 public:
 
-    Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector3 c1, Vector3 c2, Vector3 c3, int width, int height);
+    Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector3 t1, Vector3 t2, Vector3 t3);
 
     int width;
     int height;
@@ -18,6 +19,7 @@ public:
     Vector3 dv1, dv2, dv3;
 
     Vector3 n1,n2,n3;
+    Vector3 t1, t2, t3;
 
     Vector3 colorV1;
     Vector3 colorV2;
@@ -36,7 +38,7 @@ public:
 
 
     bool isInsideTriangle(int &i, int &j);
-    void Draw(int& i, int& j, ColorBuffer& buffer);
+    void Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture);
     void Lambda(int& i, int& j);
     void SetView(Matrix4 obj2view, Matrix4 camera, Matrix4 m);
     void SetTranslation(Vector3 t);

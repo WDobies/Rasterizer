@@ -78,11 +78,9 @@ void DirectionalLight::Calculate(Mesh& mesh)
 	}
 }
 
-Vector3 DirectionalLight::CalculatePhong(Triangle& triangle)
+Vector3 DirectionalLight::Calculate(Vector3 V, Vector3 N)
 {
-	Vector3 V = -triangle.dv1 * triangle.L1 + -triangle.dv2 * triangle.L2 + -triangle.dv3 * triangle.L3;
 	V = Vector3::Normalize(V);
-	Vector3 N = triangle.n1 * triangle.L1 + triangle.n2 * triangle.L2 + triangle.n3 * triangle.L3;
 	N = Vector3::Normalize(N);
 
 	position = Vector3::Normalize(position);

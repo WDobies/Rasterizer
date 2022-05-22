@@ -11,16 +11,9 @@ PointLight::PointLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vecto
 	this->specularStrenght = specularStrenght;
 }
 
-void PointLight::Calculate(Mesh& mesh)
+Vector3 PointLight::Calculate(Vector3 V, Vector3 N)
 {
-	if (!mesh.colors.empty()) mesh.colors.clear();
-	for (int i = 0; i < mesh.vSize; ++i)
-	{
 		//vertices and normals
-		Vector4 normals = mesh.model * Vector4(mesh.normals[i], 0);
-		Vector4 vertices = mesh.model * Vector4(mesh.vertices[i], 1);
-		Vector3 N = Vector3(normals.x, normals.y, normals.z);
-		Vector3 V = Vector3(vertices.x, vertices.y, vertices.z);
 		
 		N = Vector3::Normalize(N);
 
@@ -49,29 +42,6 @@ void PointLight::Calculate(Mesh& mesh)
 			spec = specularColor * specular * specularStrenght;
 		}
 		
-		mesh.colors.push_back(dif + spec +ambientColor);
-		if (mesh.colors[i].x > 255) mesh.colors[i].x = 255;
-		if (mesh.colors[i].y > 255) mesh.colors[i].y = 255;
-		if (mesh.colors[i].z > 255) mesh.colors[i].z = 255;
-	}
-
-	int i = 0;
-	for (auto& t : mesh.triangles)
-	{
-		t.colorV1 += mesh.colors[(int)mesh.indices[i].y];
-		t.colorV2 += mesh.colors[(int)mesh.indices[i].x];
-		t.colorV3 += mesh.colors[(int)mesh.indices[i].z];
-		if (t.colorV1.x > 255) t.colorV1.x = 255;
-		if (t.colorV1.y > 255) t.colorV1.y = 255;
-		if (t.colorV1.z > 255) t.colorV1.z = 255;
-											 
-		if (t.colorV2.x > 255) t.colorV2.x = 255;
-		if (t.colorV2.y > 255) t.colorV2.y = 255;
-		if (t.colorV2.z > 255) t.colorV2.z = 255;
-											 
-		if (t.colorV3.x > 255) t.colorV3.x = 255;
-		if (t.colorV3.y > 255) t.colorV3.y = 255;
-		if (t.colorV3.z > 255) t.colorV3.z = 255;
-		i++;
-	}
+		return dif + spec + ambientColor;
+	
 }
