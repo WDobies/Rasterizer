@@ -11,7 +11,7 @@ PointLight::PointLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vecto
 	this->specularStrenght = specularStrenght;
 }
 
-Vector3 PointLight::Calculate(Vector3 V, Vector3 N)
+Vector3 PointLight::Calculate(Vector3 V, Vector3 N, Vector3 texture)
 {
 		//vertices and normals
 		
@@ -28,7 +28,7 @@ Vector3 PointLight::Calculate(Vector3 V, Vector3 N)
 		//difffuse
 		float diffuse = Vector3::Dot(L, N);
 		if (diffuse < 0) diffuse = 0;
-		Vector3 dif = diffuseColor * diffuse;
+		Vector3 dif = diffuseColor * diffuse * texture * 0.00392f;;
 
 		//specular
 		Vector3 R = L - (N * 2 * (Vector3::Dot(L, N)));
@@ -39,9 +39,9 @@ Vector3 PointLight::Calculate(Vector3 V, Vector3 N)
 		if (specular > 0)
 		{
 			specular = pow(specular, shininess);
-			spec = specularColor * specular * specularStrenght;
+			spec = specularColor * specular * specularStrenght * texture * 0.00392f;;
 		}
 		
-		return dif + spec + ambientColor;
+		return dif + spec + ambientColor * texture * 0.00392f;;
 	
 }

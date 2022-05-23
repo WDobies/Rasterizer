@@ -46,6 +46,7 @@ Cone::Cone(int vert, float radius)
 	}
 
 	CalculateNormals();
+	CalculateTexCoords();
 
 	for (int i = 0; i < tSize; i++)
 	{

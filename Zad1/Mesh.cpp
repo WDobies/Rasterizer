@@ -58,9 +58,9 @@ void Mesh::CalculateTexCoords()
 		if (u2 > 1) u2 = 1;
 		if (u3 > 1) u3 = 1;
 
-		texCoords[indices.at(i).y] = Vector3(v1,u1,0);
-		texCoords[indices.at(i).x] = Vector3(v2,u2,0);
-		texCoords[indices.at(i).z] = Vector3(v3,u3,0);
+		texCoords[indices.at(i).y] = Vector3(u1,v1,0);
+		texCoords[indices.at(i).x] = Vector3(u2,v2,0);
+		texCoords[indices.at(i).z] = Vector3(u3,v3,0);
 		//std::cout << u1 << " " << u2 << " " << u2 << "\n";
 	}
 }

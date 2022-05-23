@@ -20,20 +20,21 @@
 int main()
 {
 	ColorBuffer buffer(WIDTH, HEIGHT);
-	Texture texture("texture.png");
+
+	Texture texture("UV.png");
 	//std::cout<<texture.GetColor(10, 10).ToString();
 
-	Sphere sphere(25,25);
+	Sphere sphere(10,10);
 
 	Matrix4 obj2view;
 	obj2view.Perspective(50, 1.f, 0.1f, 100.f);
 
 	Matrix4 camera;
-	camera = camera.LookAt(Vector3(0, 0, 0), Vector3(0, 0, 10), Vector3(0, 1, 0));
+	camera = camera.LookAt(Vector3(0, 0, -10), Vector3(0, 0, 10), Vector3(0, 1, 0));
 
 	Matrix4 modelSphere;
-	modelSphere = modelSphere.Translate(modelSphere, Vector3(0, -1, 7));
-	modelSphere = modelSphere.Rotate(modelSphere, Vector3(1, 0, 1), 45);
+	modelSphere = modelSphere.Translate(modelSphere, Vector3(0, 0, 7));
+	//modelSphere = modelSphere.Rotate(modelSphere, Vector3(0, 1, 0), 170);
 
 	sphere.SetModelMatrix(modelSphere);
 	sphere.SetCamera(camera);
@@ -48,8 +49,6 @@ int main()
 	for (auto& f: figures)
 	{
 		f.SetView();
-		//pl.Calculate(f);
-		//dl.Calculate(f);
 	}
 
 	for (int i = 0; i < HEIGHT; i++)

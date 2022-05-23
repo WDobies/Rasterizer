@@ -3,13 +3,12 @@
 #include "Matrix4.h"
 #include <vector>
 #include "Triangle.h"
-#include "Mesh.h"
+
 class DirectionalLight : public Light
 {
 public:
 	DirectionalLight();
-	DirectionalLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vector3 specular, int shininess = 8, float specularStrenght = 0.5f);
-	void Calculate(Mesh& mesh);
-	Vector3 Calculate(Vector3 V, Vector3 N);
+	DirectionalLight(Vector3 position, Vector3 ambient, Vector3 diffuse, Vector3 specular, int shininess = 16, float specularStrenght = 0.5f);
+	Vector3 Calculate(Vector3 V, Vector3 N, Vector3 texture);
 };
 

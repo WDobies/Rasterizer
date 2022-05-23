@@ -18,6 +18,7 @@ Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, V
 
 void Triangle::SetView(Matrix4 obj2view, Matrix4 camera, Matrix4 m) {
 
+	model = m;
 	Vector4 p1 = obj2view * camera * m * Vector4(v1, 1);
 	Vector4 p2 = obj2view * camera * m * Vector4(v2, 1);
 	Vector4 p3 = obj2view * camera * m * Vector4(v3, 1);
@@ -54,33 +55,19 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)
 		L2 = (dy31 * (j - v3.x) + dx13 * (i - v3.y)) / (dy31 * dx23 + dx13 * dy23);
 		L3 = 1 - L2 - L1;
 
-		Vector3 V = -dv1 * L1 + -dv2 * L2 + -dv3 * L3;
+		Vector3 V = dv1 * L1 + dv2 * L2 + dv3 * L3;
 		Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
 
-		Matrix4 model;
-		model = Matrix4::Translate(model, Vector3(0, -1, 7));
+		//Matrix4 model;
+		//model = Matrix4::Translate(model, Vector3(0, -1, 7));
 
 		Vector4 vertices = model * Vector4(V, 1);
 
 		V = Vector3(vertices.x, vertices.y, vertices.z);
 
-		DirectionalLight pl(Vector3(-0.4f, 0.0, -0.7f), Vector3(50, 0, 0), Vector3(210, 0, 0), Vector3(255, 255, 255));
-		//PointLight pl(Vector3(2, 0, -5), Vector3(0, 15, 0), Vector3(0, 220, 0), Vector3(255, 255, 255));
+		//DirectionalLight pl(Vector3(0.7f, 0.0, 0.2f), Vector3(10, 10, 10), Vector3(70, 70, 70), Vector3(200, 200, 200));
+		PointLight pl(Vector3(6, 0, 3), Vector3(15, 15, 15), Vector3(70, 70, 70), Vector3(255, 255, 255));
 
-		colorV1 = Vector3(0, 0, 0);
-		colorV2 = Vector3(0, 0, 0);
-		colorV3 = Vector3(0, 0, 0);
-
-		colorV1 = pl.Calculate(V, N);
-		colorV2 = pl.Calculate(V, N);
-		colorV3 = pl.Calculate(V, N);
-		//std::cout <<  t1.y << "\n";
-		
-		//colorV1 = texture.GetColor((texture.width - 1) * t1.x, (texture.height - 1) * t1.y);
-		//colorV2 = texture.GetColor((texture.width - 1) * t2.x, (texture.height - 1) * t2.y);
-		//colorV3 = texture.GetColor((texture.width - 1) * t3.x, (texture.height - 1) * t3.y);
-
-		
 
 		float v = t1.x * L1 + t2.x * L2 + t3.x * L3;
 		float u = t1.y * L1 + t2.y * L2 + t3.y * L3;
@@ -88,6 +75,10 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)
 		colorV1 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
 		colorV2 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
 		colorV3 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
+		CutColorRange();
+		colorV1 = pl.Calculate(V, N, colorV1);
+		colorV2 = pl.Calculate(V, N, colorV2);
+		colorV3 = pl.Calculate(V, N, colorV3);
 		CutColorRange();
 		//color for each pixel
 		R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
