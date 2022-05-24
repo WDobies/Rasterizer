@@ -3,6 +3,11 @@
 #include "ColorBuffer.h"
 #include "Matrix4.h"
 #include "Texture.h"
+#include "DirectionalLight.h"
+#include "PointLight.h"
+#include "Matrix4.h"
+#include "DepthBuffer.h"
+
 class Triangle
 {
 public:
@@ -36,8 +41,8 @@ public:
     float L2;
     float L3;
 
-
     bool isInsideTriangle(int &i, int &j);
+    void Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture, PointLight& pl);
     void Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture);
     void Lambda(int& i, int& j);
     void SetView(Matrix4 obj2view, Matrix4 camera, Matrix4 m);

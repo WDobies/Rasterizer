@@ -1,8 +1,6 @@
 #pragma once
 #include "Light.h"
-#include "Matrix4.h"
 #include <vector>
-#include "Triangle.h"
 
 class DirectionalLight : public Light
 {

@@ -1,6 +1,5 @@
 #pragma once
 #include "Light.h"
-#include "Mesh.h"
 class PointLight : public Light
 {
 public:

@@ -1,10 +1,6 @@
 #include "Triangle.h"
 #include <iostream>
-#include "Matrix4.h"
-#include "ColorBuffer.h"
-#include "DepthBuffer.h"
-#include "DirectionalLight.h"
-#include "PointLight.h"
+
 
 
 Triangle::Triangle(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 n1, Vector3 n2, Vector3 n3, Vector3 t1, Vector3 t2, Vector3 t3) :
@@ -46,7 +42,7 @@ void Triangle::SetView(Matrix4 obj2view, Matrix4 camera, Matrix4 m) {
 	if (dy31 < 0 || (dy31 == 0 && dx31 > 0)) { tl3 = true; }
 }
 
-void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)
+void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture, PointLight& pl)
 {
 	if (isInsideTriangle(i, j))
 	{
@@ -58,16 +54,13 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)
 		Vector3 V = dv1 * L1 + dv2 * L2 + dv3 * L3;
 		Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
 
-		//Matrix4 model;
-		//model = Matrix4::Translate(model, Vector3(0, -1, 7));
+		Matrix4 mk;
+		mk = Matrix4::Translate(mk, Vector3(2, 1, 4));
 
 		Vector4 vertices = model * Vector4(V, 1);
-
+		Vector4 norms = model * Vector4(N, 0);
 		V = Vector3(vertices.x, vertices.y, vertices.z);
-
-		//DirectionalLight pl(Vector3(0.7f, 0.0, 0.2f), Vector3(10, 10, 10), Vector3(70, 70, 70), Vector3(200, 200, 200));
-		PointLight pl(Vector3(6, 0, 3), Vector3(15, 15, 15), Vector3(70, 70, 70), Vector3(255, 255, 255));
-
+		N = Vector3(norms.x, norms.y, norms.z);
 
 		float v = t1.x * L1 + t2.x * L2 + t3.x * L3;
 		float u = t1.y * L1 + t2.y * L2 + t3.y * L3;
@@ -80,6 +73,37 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)
 		colorV2 = pl.Calculate(V, N, colorV2);
 		colorV3 = pl.Calculate(V, N, colorV3);
 		CutColorRange();
+		//color for each pixel
+		R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
+		G = L1 * colorV1.y + L2 * colorV2.y + L3 * colorV3.y;
+		B = L1 * colorV1.z + L2 * colorV2.z + L3 * colorV3.z;
+
+		float depth = L1 * v1.z + L2 * v2.z + L3 * v3.z;
+		if (depth < DEPTHBUFFER[i * HEIGHT + j])
+		{
+			buffer.SetColor(j, i, R, G, B);
+			DEPTHBUFFER[i * HEIGHT + j] = depth;
+		}
+	}
+}
+
+void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)
+{
+	if (isInsideTriangle(i, j))
+	{
+		//baricentric cords
+		L1 = (dy23 * (j - v3.x) + dx32 * (i - v3.y)) / (dy23 * dx13 + dx32 * dy13);
+		L2 = (dy31 * (j - v3.x) + dx13 * (i - v3.y)) / (dy31 * dx23 + dx13 * dy23);
+		L3 = 1 - L2 - L1;
+
+		float v = t1.x * L1 + t2.x * L2 + t3.x * L3;
+		float u = t1.y * L1 + t2.y * L2 + t3.y * L3;
+		//std::cout << v << "\n";
+		colorV1 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
+		colorV2 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
+		colorV3 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
+		CutColorRange();
+
 		//color for each pixel
 		R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
 		G = L1 * colorV1.y + L2 * colorV2.y + L3 * colorV3.y;

@@ -28,6 +28,7 @@ public:
 	void SetView();
 	void SetColor(const Vector3& color);
 	void SetColorPerVertex(const Vector3& v1, const Vector3& v2, const Vector3& v3);
+	void Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture, PointLight& pl);
 	void Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture);
 };
 
