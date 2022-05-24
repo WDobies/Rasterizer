@@ -108,11 +108,11 @@ void Mesh::SetColorPerVertex(const Vector3& v1, const Vector3& v2, const Vector3
 	}
 }
 
-void Mesh::Draw(int& i, int& j, ColorBuffer& buffer,Texture& texture, PointLight& pl)
+void Mesh::Draw(int& i, int& j, ColorBuffer& buffer,Texture& texture, PointLight& pl, DirectionalLight& dl)
 {
 	for (auto& t : triangles)
 	{
-		t.Draw(i, j, buffer, texture,pl);
+		t.Draw(i, j, buffer, texture,pl,dl);
 	}
 }
 void Mesh::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture)

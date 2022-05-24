@@ -42,7 +42,7 @@ void Triangle::SetView(Matrix4 obj2view, Matrix4 camera, Matrix4 m) {
 	if (dy31 < 0 || (dy31 == 0 && dx31 > 0)) { tl3 = true; }
 }
 
-void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture, PointLight& pl)
+void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture, PointLight& pl, DirectionalLight& dl)
 {
 	if (isInsideTriangle(i, j))
 	{
@@ -53,9 +53,6 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture, Point
 
 		Vector3 V = dv1 * L1 + dv2 * L2 + dv3 * L3;
 		Vector3 N = n1 * L1 + n2 * L2 + n3 * L3;
-
-		Matrix4 mk;
-		mk = Matrix4::Translate(mk, Vector3(2, 1, 4));
 
 		Vector4 vertices = model * Vector4(V, 1);
 		Vector4 norms = model * Vector4(N, 0);
@@ -69,9 +66,15 @@ void Triangle::Draw(int& i, int& j, ColorBuffer& buffer, Texture& texture, Point
 		colorV2 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
 		colorV3 = texture.GetColor((texture.width - 1) * v, (texture.height - 1) * u);
 		CutColorRange();
-		colorV1 = pl.Calculate(V, N, colorV1);
-		colorV2 = pl.Calculate(V, N, colorV2);
-		colorV3 = pl.Calculate(V, N, colorV3);
+		Vector3 pointL1 = pl.Calculate(V, N, colorV1);
+		Vector3 pointL2 = pl.Calculate(V, N, colorV2);
+		Vector3 pointL3 = pl.Calculate(V, N, colorV3);
+		CutColorRange();
+		V = -dv1 * L1 + -dv2 * L2 + -dv3 * L3;
+		N = n1 * L1 + n2 * L2 + n3 * L3;
+		colorV1 = dl.Calculate(V, N, colorV1) + pointL1;
+		colorV2 = dl.Calculate(V, N, colorV2) + pointL2;
+		colorV3 = dl.Calculate(V, N, colorV3) + pointL3;
 		CutColorRange();
 		//color for each pixel
 		R = L1 * colorV1.x + L2 * colorV2.x + L3 * colorV3.x;
